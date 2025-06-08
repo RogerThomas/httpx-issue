@@ -8,8 +8,5 @@ tasks:
   ruff: uvx ruff check --fix --unsafe-fixes .
   pyright: uvx pyright .
 
-  hey-httpx: ./hey.sh 10000 200 httpx
-  hey-niquests: ./hey.sh 10000 200 niquests
-
   test-main: http GET localhost:8000/main?log_exception=true
   test-upstream: http GET localhost:8001/upstream
