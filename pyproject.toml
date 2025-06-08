@@ -1,0 +1,54 @@
+[project]
+name = "httpx-issue"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.10"
+dependencies = [
+    "fastapi[all]>=0.115.12",
+    "httpx>=0.28.1",
+    "niquests>=3.14.1",
+    "rich>=14.0.0",
+    "typer>=0.16.0",
+]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.401",
+    "ruff>=0.11.13",
+]
+
+[tool.ruff]
+line-length = 100
+lint.extend-select  = [
+    "A",        # Detect shadowed builtins
+    "BLE",      # Disallow catch-all exceptions
+    "C4",       # Catch incorrect use of comprehensions, dict, list, etc.
+    "COM",      # Enforce trailing comma rules
+    "DTZ",      # Require strict timezone manipulation with datetime
+    "E",        # PyCodeStyle errors
+    "FA",       # Enforce from __future__ import annotations
+    "FBT",      # Detect boolean traps
+    "F",        # Pyflakes rules
+    "I",        # Sort imports properly
+    "ICN",      # Use common import conventions
+    "ISC",      # Good use of string concatenation
+    "N",        # Enforce naming conventions, e.g. ClassName vs function_name
+    "NPY",      # Some numpy-specific things
+    "PTH",      # Use pathlib instead of os.path
+    "RET",      # Good return practices
+    "S",        # Disallow things like "exec"; also restricts "assert" but NOQA when needed
+    "SIM",      # Common simplification rules
+    "TID",      # Some good import practices
+    "TC",       # Enforce importing certain types in a TYPE_CHECKING block
+    "TD",       # Be diligent with TODO comments
+    "UP",       # Warn if certain things can changed due to newer Python versions
+    "W",        # PyCodeStyle warnings
+]
+lint.ignore = [
+    "D211",     # no-blank-line-before-class
+    "D213",     # multi-line-summary-second-line
+]
+
+[tool.pyright]
+typeCheckingMode = "strict"
