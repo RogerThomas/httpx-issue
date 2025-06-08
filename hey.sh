@@ -11,6 +11,6 @@ CLIENT=${3:-httpx}
 
 echo "Running load test with $REQUESTS requests and $CONCURRENT concurrent clients"
 
-echo "Command: hey -n $REQUESTS -c $CONCURRENT http://localhost:8000/main?client=$CLIENT"
+echo "Command: hey -n $REQUESTS -c $CONCURRENT http://localhost:8000/main?http_client=$CLIENT"
 
-hey -n $REQUESTS -c $CONCURRENT http://localhost:8000/main?client=$CLIENT
+hey -n $REQUESTS -c $CONCURRENT http://localhost:8000/main?http_client=$CLIENT

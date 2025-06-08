@@ -2,13 +2,14 @@
 version: '3'
 
 tasks:
-  serve-main: UPSTREAM_HOST=localhost uv run fastapi dev server.py --port=8000
+  serve-main: uv run fastapi dev server.py --port=8000
   serve-upstream: SIMULATE_FAILURE={{default "false" .CLI_ARGS}} uv run fastapi dev server.py --port=8001
 
-  ruff: ruff check --fix --unsafe-fixes .
-  pyright: pyright .
+  ruff: uvx ruff check --fix --unsafe-fixes .
+  pyright: uvx pyright .
 
-  hey: ./hey.sh {{.CLI_ARGS}}
+  hey-httpx: ./hey.sh 10000 200 httpx
+  hey-niquests: ./hey.sh 10000 200 niquests
 
   test-main: http GET localhost:8000/main?log_exception=true
   test-upstream: http GET localhost:8001/upstream

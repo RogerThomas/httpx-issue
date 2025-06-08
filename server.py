@@ -35,7 +35,7 @@ app = FastAPI(lifespan=_lifespan)
 
 async def _get_client(
     request: Request,
-    http_client: Literal["httpx", "niquests"] = Query("httpx"),
+    http_client: Literal["httpx", "niquests"] = Query(default="httpx"),
 ) -> AsyncGenerator[HTTPClient]:
     client_to_yield = {
         "httpx": request.app.state.httpx_client,
@@ -49,7 +49,7 @@ HTTPClientDep = Annotated[AsyncClient, Depends(_get_client)]
 
 @app.get("/upstream")
 def upstream() -> JSONResponse:
-    simulate_failure = True if os.environ["SIMULATE_FAILURE"] == "true" else False
+    simulate_failure = os.environ["SIMULATE_FAILURE"] == "true"
     logger.info("Starting request, simulate failure: %s", simulate_failure)
     if simulate_failure:
         time.sleep(30.0)
@@ -60,15 +60,11 @@ def upstream() -> JSONResponse:
 @app.get("/main")
 async def main(
     http_client: HTTPClientDep,
-    *,
     log_exception: bool = Query(default=False, description="Log exception details"),
 ) -> JSONResponse:
-    host = os.environ["UPSTREAM_HOST"]
-    url = f"http://{host}:8001/upstream"
     try:
         response = await http_client.get(
-            url,
-            # "http://host.docker.internal:8001/upstream",
+            "http://localhost:8001/upstream",
             timeout=2.5,
             headers={"Authorization": "Bearer asdasdasd"},
         )
@@ -76,11 +72,6 @@ async def main(
         if log_exception:
             logger.exception(f"Error during upstream request: {e}")
         raise
-        # tb = traceback.format_exc()
-        # if "httpx.PoolTimeout" in tb:
-        #     logger.error("PoolTimeout occurred")
-        #     return JSONResponse({"error": "PoolTimeout"}, status_code=408)
-        # return JSONResponse({"error": f"Upstream request failed {e}"}, status_code=500)
 
     if response.status_code != 200:
         logger.error(f"Failed to get upstream: {response.status_code}")
