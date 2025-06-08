@@ -1,12 +1,9 @@
 # https://taskfile.dev
-
 version: '3'
 
 tasks:
   serve-main: UPSTREAM_HOST=localhost uv run fastapi dev server.py --port=8000
   serve-upstream: SIMULATE_FAILURE={{default "false" .CLI_ARGS}} uv run fastapi dev server.py --port=8001
-  build: docker build -t httpx-issue .
-  run: docker run --rm -it -p 8000:8000 --name=httpx-issue httpx-issue
 
   ruff: ruff check --fix --unsafe-fixes .
   pyright: pyright .
